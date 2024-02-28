@@ -34,14 +34,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.example.bookshelf.R
 import com.example.bookshelf.model.Book
 import com.example.bookshelf.ui.theme.BookshelfTheme
@@ -95,17 +91,17 @@ fun BookCard(book: Book, modifier: Modifier = Modifier) {
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-        AsyncImage(
-            model = ImageRequest.Builder(context = LocalContext.current)
-                .data(book.imgSrc)
-                .crossfade(true)
-                .build(),
-            error = painterResource(R.drawable.ic_broken_image),
-            placeholder = painterResource(R.drawable.loading_img),
-            contentDescription = stringResource(R.string.book_cover),
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxWidth()
-        )
+//        AsyncImage(
+//            model = ImageRequest.Builder(context = LocalContext.current)
+//                .data(book.imgSrc)
+//                .crossfade(true)
+//                .build(),
+//            error = painterResource(R.drawable.ic_broken_image),
+//            placeholder = painterResource(R.drawable.loading_img),
+//            contentDescription = stringResource(R.string.book_cover),
+//            contentScale = ContentScale.Crop,
+//            modifier = Modifier.fillMaxWidth()
+//        )
     }
 }
 
@@ -133,14 +129,5 @@ fun BooksGridScreen(books: List<Book>, modifier: Modifier = Modifier) {
 fun LoadingScreenPreview() {
     BookshelfTheme {
         LoadingScreen()
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BooksGridScreenPreview() {
-    BookshelfTheme {
-        val mockData = List(10) { Book("$it", "") }
-        BooksGridScreen(mockData)
     }
 }

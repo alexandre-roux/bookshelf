@@ -15,7 +15,7 @@
  */
 package com.example.bookshelf.data
 
-import com.example.bookshelf.model.Book
+import com.example.bookshelf.model.ApiResponse
 import com.example.bookshelf.network.BooksApiService
 
 /**
@@ -23,7 +23,7 @@ import com.example.bookshelf.network.BooksApiService
  */
 interface BooksRepository {
     /** Fetches list of books from booksApi */
-    suspend fun getBooks(): List<Book>
+    suspend fun getBooks(query: String): ApiResponse
 }
 
 /**
@@ -33,5 +33,5 @@ class NetworkBooksRepository(
     private val booksApiService: BooksApiService
 ) : BooksRepository {
     /** Fetches list of books from booksApi*/
-    override suspend fun getBooks(): List<Book> = booksApiService.getBooks()
+    override suspend fun getBooks(query: String): ApiResponse = booksApiService.getBooks(query)
 }

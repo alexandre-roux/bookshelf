@@ -16,8 +16,11 @@
 
 package com.example.bookshelf.network
 
+import com.example.bookshelf.model.ApiResponse
 import com.example.bookshelf.model.Book
 import retrofit2.http.GET
+import retrofit2.http.Headers
+import retrofit2.http.Query
 
 /**
  * A public interface that exposes the [getBooks] method
@@ -25,9 +28,10 @@ import retrofit2.http.GET
 interface BooksApiService {
     /**
      * Returns a [List] of [Book] and this method can be called from a Coroutine.
-     * The @GET annotation indicates that the "photos" endpoint will be requested with the GET
+     * The @GET annotation indicates that the "volumes" endpoint will be requested with the GET
      * HTTP method
      */
-    @GET("photos")  //TODO
-    suspend fun getBooks(): List<Book>
+    @Headers("Content-Type: application/json")
+    @GET("volumes")
+    suspend fun getBooks(@Query("q") query: String): ApiResponse
 }

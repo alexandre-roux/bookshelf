@@ -60,7 +60,8 @@ class BookshelfViewModel(private val booksRepository: BooksRepository) : ViewMod
         viewModelScope.launch {
             bookshelfUiState = BookshelfUiState.Loading
             bookshelfUiState = try {
-                BookshelfUiState.Success(booksRepository.getBooks())
+                val apiResponse = booksRepository.getBooks("jazz+history")
+                BookshelfUiState.Success(apiResponse.items)
             } catch (e: IOException) {
                 BookshelfUiState.Error
             } catch (e: HttpException) {
