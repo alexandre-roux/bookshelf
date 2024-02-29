@@ -16,15 +16,14 @@
 
 package com.example.bookshelf.model
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/**
- * This data class defines a Book which includes an ID, and the image URL. //TODO
- */
 @Serializable
 data class ApiResponse(
-    @SerialName("kind") val kind: String,
-    @SerialName("totalItems") val totalItems: Int,
-    @SerialName("items") val items: List<Book>
+    val items: List<Result>
+)
+
+@Serializable
+data class Result(
+    val volumeInfo: Book
 )

@@ -15,6 +15,7 @@
  */
 package com.example.bookshelf.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,10 +35,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.bookshelf.R
 import com.example.bookshelf.model.Book
 import com.example.bookshelf.ui.theme.BookshelfTheme
@@ -91,17 +96,23 @@ fun BookCard(book: Book, modifier: Modifier = Modifier) {
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-//        AsyncImage(
-//            model = ImageRequest.Builder(context = LocalContext.current)
-//                .data(book.imgSrc)
-//                .crossfade(true)
-//                .build(),
-//            error = painterResource(R.drawable.ic_broken_image),
-//            placeholder = painterResource(R.drawable.loading_img),
-//            contentDescription = stringResource(R.string.book_cover),
-//            contentScale = ContentScale.Crop,
-//            modifier = Modifier.fillMaxWidth()
-//        )
+        AsyncImage(
+            model = ImageRequest.Builder(context = LocalContext.current)
+                .data(book.imageLinks?.smallThumbnail)
+                .crossfade(true)
+                .build(),
+            error = painterResource(R.drawable.ic_broken_image),
+            placeholder = painterResource(R.drawable.loading_img),
+            contentDescription = stringResource(R.string.book_cover),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxWidth(),
+            onError = { error ->
+                Log.e(
+                    "CoilError",
+                    "Error loading image: ${error.result.throwable.message}"
+                )
+            }
+        )
     }
 }
 
@@ -112,9 +123,9 @@ fun BooksGridScreen(books: List<Book>, modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues(4.dp)
     ) {
-        items(items = books, key = { photo -> photo.id }) { photo ->
+        items(items = books) { book ->
             BookCard(
-                photo,
+                book,
                 modifier = modifier
                     .padding(4.dp)
                     .fillMaxWidth()
