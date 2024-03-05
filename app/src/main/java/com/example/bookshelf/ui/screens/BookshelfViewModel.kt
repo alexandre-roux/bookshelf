@@ -15,7 +15,6 @@
  */
 package com.example.bookshelf.ui.screens
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -63,22 +62,16 @@ class BookshelfViewModel(private val booksRepository: BooksRepository) : ViewMod
             bookshelfUiState = try {
                 val apiResponse = booksRepository.getBooks("jazz+history")
                 val items = apiResponse.items
-                val books = items.map { result ->
-                    val modifiedVolumeInfo = result.volumeInfo.copy(
-                        imageLinks = result.volumeInfo.imageLinks?.copy(
-                            smallThumbnail = result.volumeInfo.imageLinks.smallThumbnail?.replace(
-                                "http",
-                                "https"
-                            ),
-                            thumbnail = result.volumeInfo.imageLinks.thumbnail?.replace(
-                                "http",
-                                "https"
-                            )
-                        )
-                    )
-                    Log.d("BookshelfViewModel", modifiedVolumeInfo.imageLinks?.thumbnail.toString())
-                    result.copy(volumeInfo = modifiedVolumeInfo)
-                }.map { it.volumeInfo } // Extract volumeInfo from BookItem
+                var books = ArrayList<Book>()
+                items.forEach { result -> books.add(result.volumeInfo) }
+                books = books.filter { book ->
+                    book.imageLinks?.thumbnail != null
+                }.toCollection(ArrayList())
+                for (book in books) {
+                    book.imageLinks?.let { imageLinks ->
+                        imageLinks.thumbnail = imageLinks.thumbnail?.replace("http", "https")
+                    }
+                }
                 BookshelfUiState.Success(books)
             } catch (e: IOException) {
                 BookshelfUiState.Error

@@ -34,6 +34,6 @@ data class Book(
 
 @Serializable
 data class ImageLinks(
-    val smallThumbnail: String?,
-    val thumbnail: String?
+    var smallThumbnail: String?,
+    var thumbnail: String?
 )
